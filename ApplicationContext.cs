@@ -19,7 +19,8 @@ namespace CSV_Reader
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=XIAOMI\SQLEXPRESS;Database=CSV_Data;Trusted_Connection=True;TrustServerCertificate=True;");
+            //Change this to your conncetion stirng
+            optionsBuilder.UseSqlServer(@"Server= Your Server ;Database=CSV_Data;Trusted_Connection=True;TrustServerCertificate=True;");
         }
     }
 

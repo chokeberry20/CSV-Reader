@@ -6,8 +6,10 @@ namespace CSV_Reader
 {
     public class Program
     {
-        public const string absolutePath = "C:\\Programming\\project\\CSV_Reader\\Files\\sample-cab-data.csv";
-        public const string duplicatePath = "C:\\Programming\\project\\CSV_Reader\\Files\\duplicate.csv";
+        //Change this to your absolute path to .csv file
+        public const string absolutePath = "Csv_Reader\\Files\\sample-cab-data.csv";
+        //Chage this to your destination folder
+        public const string duplicatePath = "Csv_Reader\\Files\\duplicate.csv";
 
         public static void Main(string[] args)
         {
