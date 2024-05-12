@@ -11,31 +11,31 @@ namespace CSV_Reader
 
         public static void Main(string[] args)
         {
-            var allRecords = CsvRead(absolutePath);
+            var allRecordsFromCsv = CsvRead(absolutePath);
 
-            CsvWriteDuplicate(allRecords);
+            CsvWriteDuplicate(allRecordsFromCsv);
 
-            var cabUniqueList = FindUniqueCabs(allRecords);
+            var taxiUniqueList = FindUniqueCabs(allRecordsFromCsv);
 
-            ConvertStoreAndFwdFlagData(cabUniqueList);
+            ConvertStoreAndFwdFlagData(taxiUniqueList);
 
-            var cabsWithIdList = AddId(cabUniqueList);
+            var taxisWithIdList = AddId(taxiUniqueList);
 
             using (ApplicationContext db = new ApplicationContext())
             {
-                db.AddRange(cabsWithIdList);
+                db.AddRange(taxisWithIdList);
                 db.SaveChanges();
             }
         }
 
-        static public IEnumerable<CabRecord> CsvRead(string path)
+        static public IEnumerable<TaxiRecord> CsvRead(string path)
         {
-            var list = new List<CabRecord>();
+            var list = new List<TaxiRecord>();
 
             using (var reader = new StreamReader(path))
             using (var csvReader = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                var records = csvReader.GetRecords<CabRecord>();
+                var records = csvReader.GetRecords<TaxiRecord>();
 
                 foreach (var record in records)
                 {
@@ -46,13 +46,13 @@ namespace CSV_Reader
             return list;
         }
 
-        static public IEnumerable<Cab> AddId(IEnumerable<CabRecord> cabRecords)
+        static public IEnumerable<Taxi> AddId(IEnumerable<TaxiRecord> cabRecords)
         {
-            var list = new List<Cab>();
+            var list = new List<Taxi>();
 
             foreach (var cabRecord in cabRecords)
             {
-                var cab = new Cab();
+                var cab = new Taxi();
                 cab.Id = Guid.NewGuid().ToString().Trim();
                 cab.PickUpTime = cabRecord.PickUpTime.Trim();
                 cab.DropOffTime = cabRecord.DropOffTime.Trim();
@@ -70,7 +70,7 @@ namespace CSV_Reader
             return list;
         }
 
-        static public IEnumerable<CabRecord> ConvertStoreAndFwdFlagData(IEnumerable<CabRecord> list)
+        static public IEnumerable<TaxiRecord> ConvertStoreAndFwdFlagData(IEnumerable<TaxiRecord> list)
         {
             foreach (var cab in list)
             {
@@ -81,7 +81,7 @@ namespace CSV_Reader
             return list;
         }
 
-        public static IEnumerable<CabRecord> FindUniqueCabs(IEnumerable<CabRecord> list)
+        public static IEnumerable<TaxiRecord> FindUniqueCabs(IEnumerable<TaxiRecord> list)
         {
             var uniqueList = list.GroupBy(c => new { c.PickUpTime, c.DropOffTime, c.PassengerCount })
                        .Where(g => g.Count() >= 1)
@@ -91,7 +91,7 @@ namespace CSV_Reader
             return uniqueList;
         }
 
-        public static void CsvWriteDuplicate(IEnumerable<CabRecord> allRecords)
+        public static void CsvWriteDuplicate(IEnumerable<TaxiRecord> allRecords)
         {
             var duplicateList = allRecords.GroupBy(c => new { c.PickUpTime, c.DropOffTime, c.PassengerCount })
                        .Where(g => g.Count() > 1)

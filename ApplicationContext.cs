@@ -5,7 +5,7 @@ namespace CSV_Reader
 {
     public class ApplicationContext : DbContext
     {
-        public DbSet<Cab> Cabs => Set<Cab>();
+        public DbSet<Taxi> Cabs => Set<Taxi>();
 
         public ApplicationContext()
         {
